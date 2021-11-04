@@ -1,10 +1,12 @@
 package com.udacity.asteroidradar.database
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+@Dao
 interface AsteroidDao {
     //Dao (Data Access Objects) are query CRUD operations
 
