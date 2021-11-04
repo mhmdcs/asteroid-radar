@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.network
 
 import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.utils.Constants
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -55,3 +56,20 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
 
     return formattedDateList
 }
+
+
+
+
+//utility helpful extension function/convenience method
+//to convert (Network)PictureOfDay data from network model to domain model using transformations map
+fun NetworkPictureOfDay.asDomainModel() : PictureOfDay {
+    return PictureOfDay(mediaType, title, url)
+}
+
+//fun NetworkPictureOfDay.toDomainModel(): PictureOfDay {
+//    return PictureOfDay(
+//        mediaType = this.mediaType,
+//        title = this.title,
+//        url = this.url
+//    )
+//}

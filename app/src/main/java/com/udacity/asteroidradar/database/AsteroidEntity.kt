@@ -20,8 +20,8 @@ data class AsteroidEntity(
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean){
 
-    //utility helpful extension function/convenience method to convert
-    //from database model to domain model using transformations map
+    //utility helpful extension function/convenience method
+    //to convert Asteroid data from database model to domain model using transformations map
     fun List<AsteroidEntity>.asDomainModel(): List<Asteroid>{
         return map {
             //asteroidEntity ->
