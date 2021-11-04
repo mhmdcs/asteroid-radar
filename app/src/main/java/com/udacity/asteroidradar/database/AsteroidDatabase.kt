@@ -10,6 +10,7 @@ abstract class AsteroidDatabase: RoomDatabase() {
 
     abstract val asteroidDao: AsteroidDao
 
+    //a more optimized implementation of database initialization
     //to prevent multiple instances being created, initialize the database in a singleton (companion object)
     //if you don't synchronise here, then two different threads could both create a new instance of the database
     // whereas the singleton pattern is supposed to facilitate a single shared instance across the lifecycle of the program
