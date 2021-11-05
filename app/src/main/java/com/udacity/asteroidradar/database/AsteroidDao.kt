@@ -10,6 +10,7 @@ import androidx.room.Query
 interface AsteroidDao {
     //Dao (Data Access Objects) are query CRUD operations
 
+    //Asteroids Dao
     @Insert(onConflict = OnConflictStrategy.REPLACE) //Upsert CRUD (Insert-Update) that inserts a row(record) into a column if it doesn't exist, and updates it if it does exist
     suspend fun insertAll(vararg asteroid: AsteroidEntity) //suspend functions execute a long running operation and wait for it to complete without blocking the main thread
 
@@ -21,5 +22,16 @@ interface AsteroidDao {
 
     @Query("SELECT * FROM asteroids_table WHERE closeApproachDate BETWEEN :startDate AND :endDate")
     fun getThisWeekAsteroids(startDate: String, endDate: String): LiveData<List<AsteroidEntity>>
+
+
+    //Pictures Dao
+    @Query("select * from picture_of_day_table")
+    fun getPictureOfDay() : LiveData<PictureOfDayEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllPictures(vararg pictureEntity: PictureOfDayEntity)
+
+    @Query("delete from picture_of_day_table")
+    fun  clearPicture()
 
 }

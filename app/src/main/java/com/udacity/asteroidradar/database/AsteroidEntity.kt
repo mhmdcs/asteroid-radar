@@ -3,12 +3,12 @@ package com.udacity.asteroidradar.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.domain.PictureOfDay
 
 //Entities are database objects
 
 @Entity(tableName = "asteroids_table")
 data class AsteroidEntity(
-
     //columns
     @PrimaryKey(autoGenerate = true)
     val id: Long,
@@ -18,26 +18,12 @@ data class AsteroidEntity(
     val estimatedDiameter: Double,
     val relativeVelocity: Double,
     val distanceFromEarth: Double,
-    val isPotentiallyHazardous: Boolean){
+    val isPotentiallyHazardous: Boolean)
 
-    //utility helpful extension function/convenience method
-    //to convert Asteroid data from database model to domain model using transformations map
-    fun List<AsteroidEntity>.asDomainModel(): List<Asteroid>{
-        return map {
-            //asteroidEntity ->
-            Asteroid(
-                //id = asteroidEntity.id
-                id = it.id,
-                codename = it.codename,
-                closeApproachDate = it.closeApproachDate,
-                absoluteMagnitude = it.absoluteMagnitude,
-                estimatedDiameter = it.estimatedDiameter,
-                relativeVelocity = it.relativeVelocity,
-                distanceFromEarth = it.distanceFromEarth,
-                isPotentiallyHazardous = it.isPotentiallyHazardous
-            )
-        }
-    }
-
-}
-
+@Entity(tableName = "picture_of_day_table")
+data class PictureOfDayEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long=0L,
+    val mediaType: String,
+    val title: String,
+    val url: String)

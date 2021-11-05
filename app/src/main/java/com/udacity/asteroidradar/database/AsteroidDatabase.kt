@@ -5,11 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AsteroidEntity::class], version = 1)
+@Database(entities = [AsteroidEntity::class, PictureOfDayEntity::class], version = 1)
 abstract class AsteroidDatabase: RoomDatabase() {
 
     abstract val asteroidDao: AsteroidDao
-
     //a more optimized implementation of database initialization
     //to prevent multiple instances being created, initialize the database in a singleton (companion object)
     //if you don't synchronise here, then two different threads could both create a new instance of the database

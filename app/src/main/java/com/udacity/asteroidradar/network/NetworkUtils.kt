@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.network
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.utils.Constants.DEFAULT_END_DATE_DAYS
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,10 +58,28 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     return formattedDateList
 }
 
+//will help in the repository class
+fun getTodayDateFormatted(): String {
+    val calendar =  Calendar.getInstance()
+    val currentTime = calendar.time
+    val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
 
+    return dateFormat.format(currentTime)
+}
 
+//will help in the repository class
+fun getNextWeekDateFormatted(): String {
+    val calendar =  Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_YEAR, DEFAULT_END_DATE_DAYS)
+    val currentTime = calendar.time
+    val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
 
-//utility helpful extension function/convenience method
+    return dateFormat.format(currentTime)
+}
+
+//from Network to Domain models
+
+//utility helpful extension function/convenience method, shorter implementation than the commented out code below
 //to convert (Network)PictureOfDay data from network model to domain model using transformations map
 fun NetworkPictureOfDay.asDomainModel() : PictureOfDay {
     return PictureOfDay(mediaType, title, url)
