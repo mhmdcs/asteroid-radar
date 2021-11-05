@@ -83,18 +83,18 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
 
     //get the new Picture Of The Day
     suspend fun refreshPictureOfDay(){
-    withContext(Dispatchers.IO){
-        try {
-            val picture = NasaApi.retrofitService.getPictureOfDay()
-            val domainPicture = picture.asDomainModel()
-            if(domainPicture.mediaType=="image"){ //or try "picture"?
-                database.asteroidDao.clearPicture()
-                database.asteroidDao.insertAllPictures()
+        withContext(Dispatchers.IO){
+            try {
+                val picture = NasaApi.retrofitService.getPictureOfDay()
+                val domainPicture = picture.asDomainModel()
+                if(domainPicture.mediaType=="image"){ //or try "picture"?
+                    database.asteroidDao.clearPicture()
+                    database.asteroidDao.insertAllPictures(domainPicture.asDatabaseModel())
+                }
+            }catch(error: Exception){
+                error.printStackTrace()
             }
-        }catch(error: Exception){
-            error.printStackTrace()
         }
-    }
     }
 
 
