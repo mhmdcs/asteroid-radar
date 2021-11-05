@@ -17,6 +17,7 @@
 
         <ImageView
             android:id="@+id/activity_main_image_of_the_day"
+            android:contentDescription="Asteroid Picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -94,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
+                        android:contentDescription="Explanation Button"
                         app:srcCompat="@drawable/ic_help_circle" />
 
                 </LinearLayout>
