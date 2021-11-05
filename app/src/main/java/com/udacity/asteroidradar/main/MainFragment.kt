@@ -25,7 +25,7 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         binding.asteroidRecycler.adapter = AsteroidsListAdapter(AsteroidClickListener {
-            viewModel.asteroidClicked(it)
+                 viewModel.asteroidClicked(it)
         })
 
         viewModel.navigateToDetailsFragment.observe(viewLifecycleOwner, Observer{

@@ -28,7 +28,10 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
     @RequiresApi(Build.VERSION_CODES.O)
     private val _endDate = _startDate.plusDays(7)
 
-    private val _sortFilter = MutableLiveData(SortFilter.TODAY)
+    private val _sortFilter = MutableLiveData(SortFilter.WEEKLY)
+
+    private val sortFilter : LiveData<SortFilter>
+        get() = _sortFilter
 
     fun changeSortFilter(sortFilter: SortFilter){
         _sortFilter.value = sortFilter
@@ -36,29 +39,26 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
 
     //transformation via switchMap https://stackoverflow.com/questions/47610676/how-and-where-to-use-transformations-switchmap
     @RequiresApi(Build.VERSION_CODES.O)
-    val asteroids: LiveData<List<Asteroid>> = Transformations.switchMap(_sortFilter){
-    when(it)  {
+    val asteroids : LiveData<List<Asteroid>> = Transformations.switchMap(sortFilter)
+    {
+        when(it){
+            SortFilter.WEEKLY ->
+                Transformations.map(database.asteroidDao.getThisWeekAsteroids(_startDate.toString(), _endDate.toString())) { asteroidEntities ->
+                    asteroidEntities.asDomainModel()
+                }
 
-        SortFilter.WEEKLY ->
-            Transformations.map(database.asteroidDao.getThisWeekAsteroids(_startDate.toString(), _endDate.toString()))
-            {asteroidEntity ->
-                asteroidEntity.asDomainModel()
-            }
+            SortFilter.TODAY ->
+                Transformations.map(database.asteroidDao.getThisDayAsteroids(_startDate.toString())) {asteroidEntities ->
+                    asteroidEntities.asDomainModel()
+                }
 
-        SortFilter.TODAY ->
-            Transformations.map(database.asteroidDao.getThisDayAsteroids(_startDate.toString()))
-            {asteroidEntity ->
-                asteroidEntity.asDomainModel()
-            }
+            SortFilter.CACHED ->
+                Transformations.map(database.asteroidDao.getCachedAsteroids()) { asteroidEntities ->
+                    asteroidEntities.asDomainModel()
+                }
 
-        SortFilter.CACHED ->
-            Transformations.map(database.asteroidDao.getCachedAsteroids())
-            {asteroidEntity ->
-                asteroidEntity.asDomainModel()
-            }
-
-        else -> throw IllegalArgumentException()
-    }
+            else -> throw IllegalArgumentException("")
+        }
     }
 
     val pictureOfDay: LiveData<PictureOfDay> =
