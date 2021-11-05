@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.database.AsteroidDao
+import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.database.AsteroidEntity
 import com.udacity.asteroidradar.database.asDomainModel
@@ -19,7 +20,7 @@ import org.json.JSONObject
 import java.lang.Exception
 import java.time.LocalDate
 
-class AsteroidRadarRepository(private val dao: AsteroidDao) {
+class AsteroidRadarRepository(private val database: AsteroidDatabase) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val _startDate = LocalDate.now()
@@ -39,19 +40,19 @@ class AsteroidRadarRepository(private val dao: AsteroidDao) {
     when(it)  {
 
         SortFilter.WEEKLY ->
-            Transformations.map(dao.getThisWeekAsteroids(_startDate.toString(), _endDate.toString()))
+            Transformations.map(database.asteroidDao.getThisWeekAsteroids(_startDate.toString(), _endDate.toString()))
             {asteroidEntity ->
                 asteroidEntity.asDomainModel()
             }
 
         SortFilter.TODAY ->
-            Transformations.map(dao.getThisDayAsteroids(_startDate.toString()))
+            Transformations.map(database.asteroidDao.getThisDayAsteroids(_startDate.toString()))
             {asteroidEntity ->
                 asteroidEntity.asDomainModel()
             }
 
         SortFilter.CACHED ->
-            Transformations.map(dao.getCachedAsteroids())
+            Transformations.map(database.asteroidDao.getCachedAsteroids())
             {asteroidEntity ->
                 asteroidEntity.asDomainModel()
             }
@@ -61,7 +62,7 @@ class AsteroidRadarRepository(private val dao: AsteroidDao) {
     }
 
     val pictureOfDay: LiveData<PictureOfDay> =
-        Transformations.map(dao.getPictureOfDay()) { pictureEntity ->
+        Transformations.map(database.asteroidDao.getPictureOfDay()) { pictureEntity ->
             pictureEntity?.asDomainModel()
         }
 
@@ -73,7 +74,7 @@ class AsteroidRadarRepository(private val dao: AsteroidDao) {
             val endDate = getNextWeekDateFormatted()
             val asteroidsResult = NasaApi.retrofitService.getAsteroids(startDate, endDate)
             val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroidsResult))
-            dao.insertAll(*parsedAsteroids.asDatabaseModel())
+            database.asteroidDao.insertAll(*parsedAsteroids.asDatabaseModel())
         } catch (error: Exception){
             error.printStackTrace()
         }
@@ -87,8 +88,8 @@ class AsteroidRadarRepository(private val dao: AsteroidDao) {
             val picture = NasaApi.retrofitService.getPictureOfDay()
             val domainPicture = picture.asDomainModel()
             if(domainPicture.mediaType=="image"){ //or try "picture"?
-                dao.clearPicture()
-                dao.insertAllPictures()
+                database.asteroidDao.clearPicture()
+                database.asteroidDao.insertAllPictures()
             }
         }catch(error: Exception){
             error.printStackTrace()
