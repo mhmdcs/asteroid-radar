@@ -10,7 +10,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //DataTransferObjects are responsible for parsing responses from the server
-//or formatting objects to send to the server. Convert these to domain objects before using them.
+//or formatting objects to send to the server. Convert these network objects to domain objects before using them.
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
