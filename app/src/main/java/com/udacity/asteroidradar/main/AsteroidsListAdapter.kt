@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -43,6 +44,11 @@ class AsteroidViewHolder(private val binding: AsteroidItemBinding): RecyclerView
 
 class AsteroidClickListener(val clickListener: (Asteroid) -> Unit) {
     fun onClick(asteroid: Asteroid) = clickListener(asteroid)
+
+    //this is equal to the above, except that the above is a one-liner shorter code
+//    fun onClick(asteroid: Asteroid){
+//          clickListener(asteroid)
+//    }
 }
 
 

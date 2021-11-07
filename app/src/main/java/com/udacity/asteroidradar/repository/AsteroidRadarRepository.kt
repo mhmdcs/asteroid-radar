@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -61,11 +62,6 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
         }
     }
 
-    val pictureOfDay: LiveData<PictureOfDay> =
-        Transformations.map(database.asteroidDao.getPictureOfDay()) { pictureEntity ->
-            pictureEntity?.asDomainModel()
-        }
-
     //get the new Asteroids
     suspend fun refreshAsteroids(){
     withContext(Dispatchers.IO){
@@ -73,6 +69,9 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
             val startDate = getTodayDateFormatted()
             val endDate = getNextWeekDateFormatted()
             val asteroidsResult = NasaApi.retrofitService.getAsteroids(startDate, endDate)
+            Log.i("LogRepoTest1",asteroidsResult)
+            Log.i("LogRepoTest2",startDate)
+            Log.i("LogRepoTest3",endDate)
             val parsedAsteroids = parseAsteroidsJsonResult(JSONObject(asteroidsResult))
             database.asteroidDao.insertAll(*parsedAsteroids.asDatabaseModel())
         } catch (error: Exception){
@@ -81,12 +80,18 @@ class AsteroidRadarRepository(private val database: AsteroidDatabase) {
     }
     }
 
+    val pictureOfDay: LiveData<PictureOfDay> =
+        Transformations.map(database.asteroidDao.getPictureOfDay()) { pictureEntity ->
+            pictureEntity?.asDomainModel()
+        }
+
     //get the new Picture Of The Day
     suspend fun refreshPictureOfDay(){
         withContext(Dispatchers.IO){
             try {
-                val picture = NasaApi.retrofitService.getPictureOfDay()
-                val domainPicture = picture.asDomainModel()
+                val networkPicture = NasaApi.retrofitService.getPictureOfDay()
+                Log.i("LogRepoTest4",networkPicture.toString())
+                val domainPicture = networkPicture.asDomainModel()
                 if(domainPicture.mediaType=="image"){ //or try "picture"?
                     database.asteroidDao.clearPicture()
                     database.asteroidDao.insertAllPictures(domainPicture.asDatabaseModel())

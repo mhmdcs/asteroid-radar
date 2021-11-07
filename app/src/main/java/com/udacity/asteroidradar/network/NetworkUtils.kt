@@ -51,7 +51,7 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     val formattedDateList = ArrayList<String>()
 
     val calendar = Calendar.getInstance()
-    for (i in 0..Constants.DEFAULT_END_DATE_DAYS) {
+    for (i in 0..7) { //instead of 7 you can use Constants.DEFAULT_END_DATE_DAYS which refers to 7 of type int in the Constants class
         val currentTime = calendar.time
         val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
         formattedDateList.add(dateFormat.format(currentTime))
@@ -73,7 +73,7 @@ fun getTodayDateFormatted(): String {
 //will help in the repository class
 fun getNextWeekDateFormatted(): String {
     val calendar =  Calendar.getInstance()
-    calendar.add(Calendar.DAY_OF_YEAR, DEFAULT_END_DATE_DAYS)
+    calendar.add(Calendar.DAY_OF_YEAR, DEFAULT_END_DATE_DAYS) //DEFAULT_END_DATE_DAYS is just 7 of type int
     val currentTime = calendar.time
     val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
 
