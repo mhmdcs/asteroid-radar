@@ -29,6 +29,7 @@ class MainFragment : Fragment() {
                  viewModel.asteroidClicked(it)
         })
 
+
         viewModel.navigateToDetailsFragment.observe(viewLifecycleOwner, Observer{
             it?.let {
                 val action = MainFragmentDirections.actionShowDetail(it)
