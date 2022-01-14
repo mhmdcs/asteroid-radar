@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.utils.SortFilter
@@ -33,11 +34,10 @@ class MainFragment : Fragment() {
         viewModel.navigateToDetailsFragment.observe(viewLifecycleOwner, Observer{
             it?.let {
                 val action = MainFragmentDirections.actionShowDetail(it)
-                NavHostFragment.findNavController(this).navigate(action)
+                NavHostFragment.findNavController(this).navigate(action) //or replace this line with extension function version this.findNavController().navigate(action)
                 viewModel.doneNavigation()
             }
             Log.i("LogMainTest","Just testing!")
-
         })
 
         setHasOptionsMenu(true)

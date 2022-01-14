@@ -42,13 +42,26 @@ class AsteroidViewHolder(private val binding: AsteroidItemBinding): RecyclerView
     }
 }
 
+//Custom ClickListener that handles clicks on [RecyclerView] items.  Passes an Asteroid object
+//associates the current item to the [onClick] function. ClickListener lambda that will be called with the current Asteroid object
 class AsteroidClickListener(val clickListener: (Asteroid) -> Unit) {
     fun onClick(asteroid: Asteroid) = clickListener(asteroid)
 
-    //this is equal to the above, except that the above is a one-liner shorter code
-//    fun onClick(asteroid: Asteroid){
-//          clickListener(asteroid)
-//    }
 }
 
+//use fun interface for setting interfaces like this next time, read https://stackoverflow.com/questions/66541938/kotlin-custom-onclicklistener-interface
+
+//code above can be read this way:
+
+//    class AsteroidOnClickListener {
+//        val clickListener: (asteroid: Asteroid) -> Unit //this is a "function type" variable which accepts parameter of Asteroid type
+//
+//        constructor(_clickListener: (Asteroid) -> Unit) {//constructor of class
+//            clickListener = _clickListener
+//        }
+//
+//        fun onClick(asteroid: Asteroid) {
+//            clickListener(asteroid)//calling of clickListener with parameter of Asteroid
+//        }
+//    }
 
